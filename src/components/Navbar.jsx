@@ -23,6 +23,9 @@ const Navbar = () => {
                 <Button color="inherit" component={Link} to="/blog">
                     Blog
                 </Button>
+                <Button color="inherit" component={Link} to="/dashboard">
+                    dashboard
+                </Button>
                 <Button color="inherit" component={Link} to="/contact">
                     Contact
                 </Button>
@@ -44,6 +47,9 @@ const Navbar = () => {
                         </Button>
                         <Button color="inherit" component={Link} to="/blog">
                             Blog
+                        </Button>
+                        <Button color="inherit" component={Link} to="/dashboard">
+                            dashboard
                         </Button>
                         <Button color="inherit" component={Link} to="/contact">
                             Contact
