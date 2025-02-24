@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardActionArea, CardMedia, Typography, Grid } from "@mui/material";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Card, CardContent, CardActionArea, CardMedia, Typography, Grid, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const BlogList = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true); // Add loading state
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    // Add error state
 
-    const handleNavigate = (selectedItem) => {
 
-        navigate(`/blogs/${selectedItem._id}`, { state: selectedItem })
-    }
-
+    // ✅ Fetch Blogs
     const fetchBlogs = async () => {
-        setLoading(true); // Set loading to true before fetching
-        setError(null);    // Clear any previous errors
+        setLoading(true);
+        setError(null);
         try {
-            const response = await axios.get('http://localhost:5000/api/blogs');
+            const response = await axios.get("http://localhost:5000/api/blogs");
             setBlogs(response.data);
         } catch (error) {
             console.error("Error fetching blogs:", error);
-            setError(error.message); // Set the error message
+            setError(error.message);
         } finally {
-            setLoading(false); // Set loading to false after fetch completes (success or error)
+            setLoading(false);
         }
     };
 
@@ -33,20 +29,45 @@ const BlogList = () => {
         fetchBlogs();
     }, []);
 
+    const handleNavigate = (selectedItem) => {
+        navigate(`/blogs/${selectedItem._id}`, { state: selectedItem })
+    }
+    const handleEdit = (blog) => {
+
+        navigate(`/add-blog`, { state: { blog, editMode: true } });
+    };
+    // ✅ Delete a Blog
+    const handleDelete = async (blogId) => {
+        if (!window.confirm("Are you sure you want to delete this blog?")) return;
+
+        try {
+            await axios.delete(`http://localhost:5000/api/blogs/${blogId}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+
+            // ✅ Refresh blog list after deletion
+            fetchBlogs();
+            alert("Blog deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting blog:", error.response || error);
+            alert(`Failed to delete blog: ${error.response?.data?.error || "Unknown error"}`);
+        }
+    };
+
     if (loading) {
-        return <div>Loading blogs...</div>; // Display a loading message
+        return <div>Loading blogs...</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>; // Display an error message
+        return <div>Error: {error}</div>;
     }
 
     return (
         <Grid container spacing={4} sx={{ padding: "2rem", marginTop: 6 }}>
             {blogs.map((blog) => (
-                <Grid item xs={12} sm={6} md={4} key={blog._id || blog.id}> {/* Use _id or id */}
+                <Grid item xs={12} sm={6} md={4} key={blog._id || blog.id}>
                     <Card>
-                        <CardActionArea onClick={() => handleNavigate(blog)}  > {/* Use _id or id */}
+                        <CardActionArea onClick={() => handleNavigate(blog)}>
                             <CardMedia
                                 component="img"
                                 height="200"
@@ -56,10 +77,21 @@ const BlogList = () => {
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    {blog.body?.substring(0, 100)}... {/* Optional chaining for body */}
+                                    {blog.content?.substring(0, 100)}...
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
+
+                        {localStorage.getItem("token") && (
+                            <div style={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
+                                <Button variant="contained" color="primary" onClick={() => handleEdit(blog)}>
+                                    Edit
+                                </Button>
+                                <Button variant="contained" color="error" onClick={() => handleDelete(blog._id)}>
+                                    Delete
+                                </Button>
+                            </div>
+                        )}
                     </Card>
                 </Grid>
             ))}

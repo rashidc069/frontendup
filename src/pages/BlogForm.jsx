@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Container, Typography } from "@mui/material";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const BlogForm = () => {
     const [blog, setBlog] = useState({ title: "", content: "" });
+    const location = useLocation()
     const navigate = useNavigate();
     const { id } = useParams();
+    const isEdit = location?.state?.editMode;
+    const editData = location?.state?.blog
+    console.log(editData)
+
+    // useEffect(() => {
+    //     if (id) {
+    //         axios.get(`http://localhost:5000/api/blogs/${id}`)
+    //             .then((response) => {
+    //                 setBlog({ title: response.data.title, content: response.data.content });
+    //             })
+    //             .catch((error) => console.error("Error fetching blog:", error));
+    //     }
+    // }, [id]);
 
     useEffect(() => {
-        if (id) {
-            axios.get(`http://localhost:5000/api/blogs/${id}`)
-                .then((response) => {
-                    setBlog({ title: response.data.title, content: response.data.content });
-                })
-                .catch((error) => console.error("Error fetching blog:", error));
+        if (isEdit) {
+            setBlog({
+                title: editData.title,
+                content: editData.content
+            })
         }
-    }, [id]);
+    }, [])
 
     const handleChange = (e) => {
         setBlog({ ...blog, [e.target.name]: e.target.value });
@@ -27,21 +40,21 @@ const BlogForm = () => {
         try {
             const token = localStorage.getItem("token");
             const headers = { Authorization: `Bearer ${token}` };
-            console.log("Token from localStorage:", token);
-            console.log("🔵 Token being sent:", token);
-            console.log("🟢 Headers being sent:", headers);
-            let response;
+
+            // let response;
             if (id) {
-                let response; await axios.put(`http://localhost:5000/api/blogs/${id}`, blog, { headers });
+                await axios.put(`http://localhost:5000/api/blogs/${id}`, blog, { headers });
+                alert("Blog updated successfully!");
             } else {
-                response = await axios.post("http://localhost:5000/api/blogs", blog, { headers });
+                await axios.post("http://localhost:5000/api/blogs", blog, { headers });
+                alert("Blog created successfully!");
             }
 
             alert("Blog saved successfully!");
             navigate("/blog");
 
         } catch (error) {
-            console.error("Error saving blog:", error.response?.data || error.message);
+
             alert(`Failed to save blog: ${error.response?.data?.error || "Unknown error"}`);
         }
     };
