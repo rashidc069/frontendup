@@ -10,7 +10,6 @@ const BlogForm = () => {
     const { id } = useParams();
     const isEdit = location?.state?.editMode;
     const editData = location?.state?.blog
-    console.log(editData)
 
     // useEffect(() => {
     //     if (id) {
