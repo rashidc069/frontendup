@@ -45,22 +45,6 @@ const BlogDetail = () => {
     //     fetchBlog();
     // }, [id]);
 
-    // const fetchRelatedPosts = async (categories) => {
-    //     try {
-    //         const response = await fetch(`http://localhost:5000/api/blogs?categories=${categories.join(',')}`);
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status: ${response.status}`);
-    //             console.log(response.status);
-    //         }
-    //         const related = await response.json();
-    //         return related.filter(post => post._id !== id); // Exclude the current blog
-    //     } catch (error) {
-    //         console.error("Error fetching related posts:", error);
-    //         return []; // Return an empty array in case of error
-    //     }
-    // };
-
-
     // if (loading) {
     //     return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
     //         <CircularProgress />
@@ -104,20 +88,6 @@ const BlogDetail = () => {
                         {data.content}
                     </Typography>
 
-                    <Typography variant="h6" sx={{ fontWeight: "bold", marginTop: "2rem" }}>
-                        Related Posts:
-                    </Typography>
-                    <ul>
-                        {/* {relatedPosts.map((relatedPost) => (
-                            <li key={relatedPost._id}>
-                                <Button style={{ textDecoration: 'none' }}>
-                                    <Typography variant="body1" color="text.primary">
-                                        {relatedPost.title}
-                                    </Typography>
-                                </Button>
-                            </li>
-                        ))} */}
-                    </ul>
                 </Paper>
             </Box>
         </div>

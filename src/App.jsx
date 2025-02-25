@@ -40,7 +40,6 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/add-blog" element={<BlogForm />} />
-            {/* <Route path="/edit-blog/:id" element={<BlogForm />} /> */}
           </Route>
         </Routes>
         <Footer />

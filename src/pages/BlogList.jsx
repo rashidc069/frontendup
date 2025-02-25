@@ -10,7 +10,7 @@ const BlogList = () => {
     const [error, setError] = useState(null);
 
 
-    // ✅ Fetch Blogs
+    //  Fetch Blogs
     const fetchBlogs = async () => {
         setLoading(true);
         setError(null);
@@ -36,7 +36,7 @@ const BlogList = () => {
 
         navigate(`/add-blog`, { state: { blog, editMode: true } });
     };
-    // ✅ Delete a Blog
+    //  Delete a Blog
     const handleDelete = async (blogId) => {
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
@@ -45,7 +45,7 @@ const BlogList = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
 
-            // ✅ Refresh blog list after deletion
+            //  Refresh blog list after deletion
             fetchBlogs();
             alert("Blog deleted successfully!");
         } catch (error) {
