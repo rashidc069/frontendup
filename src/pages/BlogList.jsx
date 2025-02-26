@@ -71,7 +71,7 @@ const BlogList = () => {
                             <CardMedia
                                 component="img"
                                 height="200"
-                                image={blog.image || "https://copysmiths.com/wp-content/uploads/2022/05/feature-image-maintain-a-successful-blog.jpg"}
+                                image={blog.image || "./src/assets/blog.jpeg"}
                                 alt={blog.title}
                             />
                             <CardContent>

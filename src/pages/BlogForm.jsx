@@ -22,13 +22,13 @@ const BlogForm = () => {
     // }, [id]);
 
     useEffect(() => {
-        if (isEdit) {
+        if (isEdit && editData) {
             setBlog({
-                title: editData.title,
-                content: editData.content
-            })
+                title: editData?.title || "",
+                content: editData?.content || ""
+            });
         }
-    }, [])
+    }, [isEdit, editData]);
 
     const handleChange = (e) => {
         setBlog({ ...blog, [e.target.name]: e.target.value });
@@ -40,20 +40,16 @@ const BlogForm = () => {
             const token = localStorage.getItem("token");
             const headers = { Authorization: `Bearer ${token}` };
 
-            // let response;
-            if (id) {
-                await axios.put(`http://localhost:5000/api/blogs/${id}`, blog, { headers });
+            if (isEdit && editData?._id) {  // ✅ Check if _id exists
+                await axios.put(`http://localhost:5000/api/blogs/${editData._id}`, blog, { headers });
                 alert("Blog updated successfully!");
             } else {
                 await axios.post("http://localhost:5000/api/blogs", blog, { headers });
                 alert("Blog created successfully!");
             }
 
-            alert("Blog saved successfully!");
             navigate("/blog");
-
         } catch (error) {
-
             alert(`Failed to save blog: ${error.response?.data?.error || "Unknown error"}`);
         }
     };

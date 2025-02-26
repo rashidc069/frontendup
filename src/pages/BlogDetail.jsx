@@ -64,7 +64,7 @@ const BlogDetail = () => {
             <Box
                 sx={{
                     position: "relative",
-                    // backgroundImage: `url(${blog.image || bannerImage})`, // Use blog image or default
+                    backgroundImage: `url(${data.image || bannerImage})`, // Use blog image or default
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     minHeight: "80vh",
@@ -74,7 +74,8 @@ const BlogDetail = () => {
                     color: "white",
                     textAlign: "center",
                     padding: "2rem",
-                    backgroundColor: 'red'
+                    backgroundColor: 'red',
+                    // backgroundImage:
                 }}
             >
                 <Typography variant="h3" sx={{ fontWeight: "bold", position: "absolute" }}>
