@@ -77,7 +77,7 @@ const Home = () => {
                             <Typography variant="h3" component="h1" gutterBottom>
                                 Welcome to My Blog
                             </Typography>
-                            <Typography variant="body1" color="textSecondary" paragraph>
+                            <Typography variant="body1" color="#979797" paragraph>
                                 Explore the latest articles and insights on various topics.
                             </Typography>
                         </Box>
@@ -185,9 +185,9 @@ const Home = () => {
                                 />
                                 <CardContent>
                                     <Typography variant="h6">{blog.title}</Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {blog.content?.substring(0, 100)}...
-                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: "text.Secondary" }}
+                                        dangerouslySetInnerHTML={{ __html: blog.content?.substring(0, 100) + "..." }}
+                                    />
                                 </CardContent>
                             </CardActionArea>
                         </Card>
@@ -198,7 +198,7 @@ const Home = () => {
             <Grid sx={{ paddingTop: 10, paddingBottom: 10, padding: 5 }}>
                 <Link to="/blog" style={{ textDecoration: "none" }}>
                     <Button variant="contained" color="primary" size="large">
-                        Read Blogs
+                        More Blogs
                     </Button>
                 </Link>
             </Grid>

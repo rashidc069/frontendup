@@ -32,27 +32,26 @@ const BlogList = () => {
     const handleNavigate = (selectedItem) => {
         navigate(`/blogs/${selectedItem._id}`, { state: selectedItem })
     }
-    const handleEdit = (blog) => {
+    // const handleEdit = (blog) => {
+    //     navigate(`/add-blog`, { state: { blog, editMode: true } });
+    // };
+    // //  Delete a Blog
+    // const handleDelete = async (blogId) => {
+    //     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
-        navigate(`/add-blog`, { state: { blog, editMode: true } });
-    };
-    //  Delete a Blog
-    const handleDelete = async (blogId) => {
-        if (!window.confirm("Are you sure you want to delete this blog?")) return;
+    //     try {
+    //         await axios.delete(`http://localhost:5000/api/blogs/${blogId}`, {
+    //             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    //         });
 
-        try {
-            await axios.delete(`http://localhost:5000/api/blogs/${blogId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            });
-
-            //  Refresh blog list after deletion
-            fetchBlogs();
-            alert("Blog deleted successfully!");
-        } catch (error) {
-            console.error("Error deleting blog:", error.response || error);
-            alert(`Failed to delete blog: ${error.response?.data?.error || "Unknown error"}`);
-        }
-    };
+    //         //  Refresh blog list after deletion
+    //         fetchBlogs();
+    //         alert("Blog deleted successfully!");
+    //     } catch (error) {
+    //         console.error("Error deleting blog:", error.response || error);
+    //         alert(`Failed to delete blog: ${error.response?.data?.error || "Unknown error"}`);
+    //     }
+    // };
 
     if (loading) {
         return <div>Loading blogs...</div>;
@@ -73,18 +72,18 @@ const BlogList = () => {
                             <CardMedia
                                 component="img"
                                 height="200"
-                                image={blog.image || "./src/assets/blog.jpeg"}
+                                image={blog.image ? `http://localhost:5000${blog.image}` : "./src/assets/blog.jpeg"}
                                 alt={blog.title}
                             />
                             <CardContent>
                                 <Typography variant="h6">{blog.title}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    {blog.content?.substring(0, 100)}...
-                                </Typography>
+                                <Typography variant="body2" sx={{ color: "text.Secondary" }}
+                                    dangerouslySetInnerHTML={{ __html: blog.content?.substring(0, 100) + "..." }}
+                                />
                             </CardContent>
                         </CardActionArea>
 
-                        {localStorage.getItem("token") && (
+                        {/* {localStorage.getItem("token") && (
                             <div style={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
                                 <Button variant="contained" color="primary" onClick={() => handleEdit(blog)}>
                                     Edit
@@ -93,7 +92,7 @@ const BlogList = () => {
                                     Delete
                                 </Button>
                             </div>
-                        )}
+                        )} */}
                     </Card>
                 </Grid>
             ))}

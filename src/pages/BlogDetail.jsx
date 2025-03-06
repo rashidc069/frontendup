@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { fetchBlogById } from "../api/blogService"; // Assuming this is your API service
 import { Box, Typography, Paper, CircularProgress, Button } from "@mui/material"; // Import CircularProgress
-import bannerImage from "../assets/blog.jpeg?url"; // Or your default banner image
-import { Link } from "react-router-dom"; // Import Link for related posts
+import bannerImage from "../assets/about-us.webp?url";
+import { Link } from "react-router-dom";
 
 const BlogDetail = () => {
     const { id } = useParams();
@@ -64,7 +64,7 @@ const BlogDetail = () => {
             <Box
                 sx={{
                     position: "relative",
-                    backgroundImage: `url(${data.image || bannerImage})`, // Use blog image or default
+                    backgroundImage: `url(${data.image ? `http://localhost:5000${data.image}` : bannerImage})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     minHeight: "80vh",
@@ -85,10 +85,11 @@ const BlogDetail = () => {
 
             <Box sx={{ padding: "2rem", maxWidth: "800px", margin: "auto" }}>
                 <Paper sx={{ padding: "1.5rem", backgroundColor: "background.paper" }}>
-                    <Typography variant="body1" sx={{ color: "text.primary", marginBottom: "1rem" }}>
-                        {data.content}
-                    </Typography>
-
+                    <Typography
+                        variant="body1"
+                        sx={{ color: "text.primary", marginBottom: "1rem" }}
+                        dangerouslySetInnerHTML={{ __html: data.content }}
+                    />
                 </Paper>
             </Box>
         </div>

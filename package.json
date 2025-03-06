@@ -10,14 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^44.2.1",
+    "@ckeditor/ckeditor5-react": "^9.5.0",
+    "@ckeditor/ckeditor5-upload": "^44.2.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.4",
     "@mui/material": "^6.4.4",
     "@tinymce/tinymce-react": "^6.0.0",
     "axios": "^1.7.9",
+    "ckeditor5": "^44.2.1",
+    "ckeditor5-premium-features": "^44.2.1",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "global": "^4.4.0",
+    "html-react-parser": "^5.2.2",
+    "jodit-react": "^5.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
     "react-material-ui-carousel": "^3.4.2",
     "react-router-dom": "^7.1.5",
     "react-slick": "^0.30.3",
@@ -25,9 +36,11 @@
     "tinymce": "^7.7.0"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^1.3.2",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "vite-plugin-node-polyfills": "^0.23.0"
   }
 }
