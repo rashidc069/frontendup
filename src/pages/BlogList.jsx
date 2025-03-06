@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardActionArea, CardMedia, Typography, Grid, Button } from "@mui/material";
+import { Box, Card, CardContent, CardActionArea, CardMedia, Typography, Grid, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -63,10 +63,12 @@ const BlogList = () => {
     }
 
     return (
+
         <Grid container spacing={4} sx={{ padding: "2rem", marginTop: 6 }}>
+
             {blogs.map((blog) => (
                 <Grid item xs={12} sm={6} md={4} key={blog._id || blog.id}>
-                    <Card>
+                    <Card sx={{ height: '100%' }}>
                         <CardActionArea onClick={() => handleNavigate(blog)}>
                             <CardMedia
                                 component="img"

@@ -1,7 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Typography, Button, Box, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { Container, Typography, Button, Box, Grid, Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
+import axios from "axios";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const Home = () => {
@@ -29,31 +30,46 @@ const Home = () => {
         },
     ];
 
-    const blogPosts = [
-        {
-            image: "./src/assets/about-us.webp",
-            title: "Blog Post 1",
-            description: "Brief description of blog post 1.  Highlight key points and takeaways.",
-            link: "/blog/post-1",
-        },
-        {
-            image: "./src/assets/about-us.webp",
-            title: "Blog Post 2",
-            description: "Brief description of blog post 2.  Focus on the problem and solution.",
-            link: "/blog/post-2",
-        },
-        {
-            image: "./src/assets/about-us.webp",
-            title: "Blog Post 3",
-            description: "Brief description of blog post 3.  Emphasize the impact of your work.",
-            link: "/blog/post-3",
-        },
-    ];
+    const navigate = useNavigate();
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch Blogs
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await axios.get("http://localhost:5000/api/blogs");
+                setBlogs(response.data.slice(0, 3)); // Only take the first 3 blogs
+            } catch (error) {
+                console.error("Error fetching blogs:", error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogs();
+    }, []);
+
+    const handleNavigate = (selectedItem) => {
+        navigate(`/blogs/${selectedItem._id}`, { state: selectedItem });
+    };
+
+    if (loading) {
+        return <div>Loading blogs...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <Container sx={{ paddingTop: "2rem", maxWidth: '100%', width: '100%' }}>
             {/* Hero Carousel */}
-            <Carousel sx={{ textAlign: "center", marginBottom: 10 }}>
+            <Carousel sx={{ textAlign: "center", marginBottom: 6 }}>
                 {images.map((image, index) => (
                     <div key={index}>
                         <img src={image.src} alt={image.alt} style={{ width: '100%', objectFit: 'cover', height: '500px' }} />
@@ -69,7 +85,7 @@ const Home = () => {
                 ))}
             </Carousel>
 
-            <Grid container spacing={2} sx={{ paddingTop: 10, backgroundColor: '#f0f0f0', padding: 5, alignItems: "center" }}> {/* Added background color and padding */}
+            <Grid container spacing={2} sx={{ paddingTop: 6, padding: 5, alignItems: "center" }}> {/* Added background color and padding */}
                 <Grid item xs={12} md={6}>
                     <Box>
                         <Typography variant="h2" gutterBottom>About Us</Typography>
@@ -139,7 +155,7 @@ const Home = () => {
                                 padding: 4,
                                 transition: 'transform 0.3s ease',
                                 display: 'flex',          // Enable flexbox
-                                justifyContent: 'center', // Center horizontally
+                                justifyContent: 'end', // Center horizontally
                                 flexDirection: 'column',
                             }}>
                                 <Typography variant="h5" gutterBottom>{study.title}</Typography> {/* Smaller title */}
@@ -157,28 +173,23 @@ const Home = () => {
 
             <Grid container spacing={4} sx={{ paddingTop: 0, padding: 5 }}>
                 {/* ... (Grid item for title) */}
-                {blogPosts.map((post, index) => (
-                    <Grid item xs={12} md={4} key={index}>
-                        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            {/* ... (CardMedia) */}
-                            <CardMedia
-                                component="img"
-                                height="200" // Adjust height as needed
-                                image={post.image}
-                                alt={post.title}
-                                sx={{ objectFit: 'cover' }}
-                            />
-                            <CardContent sx={{ flexGrow: 1 }}> {/* Content takes up available space */}
-                                <Typography variant="h5" gutterBottom>{post.title}</Typography>
-                                <Typography variant="body2">{post.description}</Typography>
-                            </CardContent>
-                            <Box sx={{ padding: 2 }}>
-                                <Link to={post.link} style={{ textDecoration: 'none' }}>
-                                    <Button variant="contained" color="primary" endIcon={<ArrowForwardIcon />}> {/* Add icon */}
-                                        Read More
-                                    </Button>
-                                </Link>
-                            </Box>
+                {blogs.map((blog) => (
+                    <Grid item xs={12} sm={6} md={4} key={blog._id}>
+                        <Card sx={{ height: '100%' }}>
+                            <CardActionArea onClick={() => handleNavigate(blog)}>
+                                <CardMedia
+                                    component="img"
+                                    height="200"
+                                    image={blog.image || "./src/assets/blog.jpeg"}
+                                    alt={blog.title}
+                                />
+                                <CardContent>
+                                    <Typography variant="h6">{blog.title}</Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {blog.content?.substring(0, 100)}...
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
                         </Card>
                     </Grid>
                 ))}
